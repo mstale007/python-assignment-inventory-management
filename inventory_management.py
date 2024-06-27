@@ -9,10 +9,7 @@ class Product:
 
     # Print object in user readable format
     def __str__(self) -> str:
-        return '{0.name} (Id: {0.id}, Quantity: {0.quantity}, Price: {0.price})'.format(self)
-    
-    def __repr__(self) -> str:
-        return 'Product({0.id!r},{0.name!r},{0.price!r},{0.quantity!r})'.format(self)
+        return '{0.name} (Id: {0.id}, Quantity: {0.quantity}, Price: {0.price:.2f})'.format(self)
     
     #Getters
     @property
@@ -84,159 +81,158 @@ class Inventory:
     
     # Save Data to JSON
     def save_data(self):
-        if os.path.isfile(self.__data_filepath):
-            with open(self.__data_filepath, "w") as file:
-                json.dump(self.items,file,default=lambda a: a.__dict__)
-                print("Data Saved!")
+        with open(self.__data_filepath, "w") as file:
+            json.dump([product.__dict__ for product in self.items], file)
+            print("Data Saved!")
+    
+    # Searches inventory for product by product id, if product does not exists returns -1 
+    def get_product_by_id(self, product_id):
+        for product in self.items:
+            if(product_id==product.id):
+                return product
+        return None
     
     # Operation #1: Add new item
     def add_item(self,new_product):
         self.items.append(new_product)
+        if(new_product.quantity<=2):
+            print("⚠ Low inventory alert for {0}".format(new_product))
     
     def prompt_to_add_item(self):
         id=input("Enter id of the product: ")
-        name=input("Enter its name: ")
-        price=float(input("It's price (in USD): "))
-        quantity=int(input("And it's quantity: "))
-        new_product=Product(id,name,price,quantity)
 
-        item_index=self.search_product_by_id(id) # Check if product already exists in inventory
-        if(item_index==-1):
+        if(not self.get_product_by_id(id)): # Check if product already exists in inventory
+            name=input("Enter its name: ")
+            price=float(input("It's price (in USD): "))
+            quantity=int(input("And it's quantity: "))
+            new_product=Product(id,name,price,quantity)
+            print("="*80)
             self.add_item(new_product)
             print("Added {0} successfully!👍🏻".format(new_product))
-            if(new_product.quantity<=2):
-                print("⚠ Low inventory alert for {0}".format(new_product))
-            print("==================================================\n\n")
+            print("="*80)
+            print("\n\n") 
         else:
-            print("Product with given id already exists in the inventory")
-            update_inventory=input("Update the existing product? (y/n): ")
-            if(update_inventory=="y"):
-                self.update_item(item_index,new_product)  
-
+            print("Product with given id already exists")
 
     # Operation #2: Update existing item
     def update_item(self,new_product:Product):
         for idx,product in enumerate(self.items):
             if(new_product.id==product.id):
-                self.items[idx].name=new_product.name
-                self.items[idx].id=new_product.id
-                self.items[idx].quantity=new_product.quantity
+                self.items[idx]=new_product
+                if(new_product.quantity<=2):
+                    print("⚠ Low inventory alert for {0}".format(new_product))
                 break
-        print("Item not found!")
-        
-    def update_item(self,index:int,new_product:Product):
-        self.items[index].name=new_product.name
-        self.items[index].id=new_product.id
-        self.items[index].quantity=new_product.quantity
-
 
     def prompt_to_update_item(self):
         id=input("Enter id of the product: ")
-        name=input("Enter its new name: ")
-        price=float(input("It's new price (in USD): "))
-        quantity=int(input("And it's updated quantity: "))
-        new_product=Product(id,name,price,quantity)
         
-        item_index=self.search_product_by_id(id)
-        if(item_index!=-1):
-            self.update_item(item_index,new_product)
+        if(self.get_product_by_id(id)):
+            name=input("Enter its new name: ")
+            price=float(input("It's new price (in USD): "))
+            quantity=int(input("And it's updated quantity: "))
+            new_product=Product(id,name,price,quantity)
+            print("="*80)
+            self.update_item(new_product)
             print("Item Updated successfully!")
-            if(new_product.quantity<=2):
-                print("⚠ Low inventory alert for {0}".format(new_product))
-            print("==================================================\n\n")
         else:
             print("Product with given id does not exists")
-            add_inventory=input("Add new product? (y/n): ")
-            print("\n\n")
-            if(add_inventory=="y"):
-                self.add_item(new_product)
+        print("="*80)
+        print("\n\n")
 
     # Operation #3: Delete existing Item
-    def delete_item(self,product_to_be_deleted:Product):
+    def delete_item(self,product_id:Product):
         for idx,product in enumerate(self.items):
-            if(product_to_be_deleted.id==product.id):
+            if(product_id==product.id):
                 self.items.pop(idx)
 
-    def delete_item(self,index:int):
-        self.items.pop(index)
-
     def prompt_to_delete_item(self):
-        id=input("Enter id of the product to be deleted: ")
-        
-        item_index=self.search_product_by_id(id)
-        if(item_index!=-1):
-            self.delete_item(item_index)
-            print("Item Deleted successfully!\n\n")
+        id=input("Enter id of the product to be deleted: ")      
+        print("="*80) 
+        if(self.get_product_by_id(id)):
+            self.delete_item(id)
+            print("Item Deleted successfully!")
         else:
-            print("Product with given id does not exists\n\n")
+            print("Product with given id does not exists")
+        print("="*80)
+        print("\n\n")
     
     
     # Operation #4: Print all Items
-    def print_product_list(self,ids=None):
-        # If no ids are passed print entire array
-        print("==================================================")
-        if ids==None:
-            for item in self.items:
-                print(item) 
-        else:
-            for item in self.items:
-                if item.id in ids:
-                    print(item) 
-        print("==================================================\n\n")
+    def print_product_list(self):
+        print("="*80)
+        for item in self.items:
+            print(item) 
+        print("="*80)
+        print("\n\n")
 
     # Operation #5: Print tabular report
     def generate_report(self):
         total_inventory_value=0
-        print("===============================================================================")
+        print("="*80)
         print("{: <10} {: <30} {: <10} {: <10} {: <10}".format("Id","Name","Quantity","Price","Alert Status"))
         for item in self.items:
             print("{: <10} {: <30} {: <10} {: <10} {: <10}".format(item.id,item.name,item.quantity,item.price,"Low 🛑" if item.quantity<=self.low_alert_threshold else "Ok ✅")) 
             total_inventory_value+=item.price*item.quantity
         
-        print("===============================================================================\n\n")
-        print("Total inventory value: ${0}\n\n".format(total_inventory_value))
+        print("="*80)
+        print("Total inventory value: ${0}".format(total_inventory_value))
+        print("="*80)
+        print("\n\n")
 
     # Operation #6: Search by ID
     def prompt_to_view_item(self):
         id=input("Enter id of the product to be view: ")
-        
-        item_index=self.search_product_by_id(id)
-        if(item_index!=-1):
-            self.print_product_list([id])
+        results=self.get_product_by_id(id)
+        print("="*80)
+        if(results):
+            print(results)
         else:
-            print("Product with given id does not already exists")
-
-    # Searches inventory for product by product id, if product does not exists returns -1 
-    def search_product_by_id(self, product_id):
-        for index,product in enumerate(self.items):
-            if(product_id==product.id):
-                return index
-        return -1
+            print("Product with given id does not exists")
+        print("="*80)
+        print("\n\n")
     
     # Operation #7: Search everywhere by keyword
-    def prompt_to_search_everywhere(self):
-        keyword=input("Enter keyword to search: ")
+    def search_everywhere_by_keyboard(self,keyword:str):
         matches=[]
+        keyword=keyword.lower() #To make the search case-insensitive
         for item in self.items:
-            if keyword in str(item.id) or keyword in str(item.name) or keyword in str(item.quantity) or keyword in str(item.price):
-                matches.append(item.id)
-        self.print_product_list(matches)
+            if keyword in str(item.id).lower() or keyword in str(item.name).lower() or keyword in str(item.quantity).lower() or keyword in str(item.price).lower():
+                matches.append(item)   
+        return matches
+
+    def prompt_to_search_by_keyboard(self):
+        keyword=input("Enter keyword to search: ")
+        matches=self.search_everywhere_by_keyboard(keyword)
+        print("="*80)
+        if matches:
+            for product in matches:
+                print(product)
+        else:
+            print("No products found matching the keyword.")
+        print("="*80)
+        print("\n\n")
+
 
     # Operation #8: List low stock items
     def prompt_to_list_low_stock(self):
-        matches=[]
+        print("="*80)
+        low_stock_found=False
         for item in self.items:
             if item.quantity<=self.low_alert_threshold:
-                matches.append(item.id)
-        self.print_product_list(matches)
+                low_stock_found=True
+                print(item)
+        if(not low_stock_found):
+            print("No product with low stock🥳")
+        print("="*80)
+        print("\n\n")
 
         
 
 def operation_selector():
     print("Welcome to Inventory Managment System!👋🏻")
 
-    load_from_backup=input("Would like to load your previous data? (y/n): ")
-    mobile_inventory=Inventory(load_from_backup=(load_from_backup=="y"))
+    load_from_backup=input("Would like to load your previous data? (y/n): ").lower()=="y"
+    mobile_inventory=Inventory(load_from_backup=load_from_backup)
     while(1):
         print("Please select an operation that you want to perform on your inventory")
         print("1. Add new Product")
@@ -264,7 +260,7 @@ def operation_selector():
         elif choice=="6":
             mobile_inventory.prompt_to_view_item()
         elif choice=="7":
-            mobile_inventory.prompt_to_search_everywhere()
+            mobile_inventory.prompt_to_search_by_keyboard()
         elif choice=="8":
             mobile_inventory.prompt_to_list_low_stock()
         elif choice=="9":

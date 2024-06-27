@@ -88,6 +88,7 @@ class Inventory:
             json.dump(self.items,file,default=lambda a: a.__dict__)
             print("Data Saved!")
 
+    # Check if product exists return boolean value
     def product_exists(self, product_id):
         return product_id in self.items
     
@@ -106,12 +107,14 @@ class Inventory:
             price=float(input("It's price (in USD): "))
             quantity=int(input("And it's quantity: "))
             new_product=Product(id,name,price,quantity)
+            print("="*80)
             self.add_item(new_product)
             print("Added {0} successfully!👍🏻".format(new_product))
-            print("==================================================\n\n")
+            print("="*80+"\n\n")
         else:
             print("Product with given id already exists in the inventory")
             update_inventory=input("Update the existing product? (y/n): ")
+            print("\n\n")
             if(update_inventory=="y"):
                 self.prompt_to_update_item(id)  
 
@@ -135,10 +138,11 @@ class Inventory:
             name=input("Enter its new name: ")
             price=float(input("It's new price (in USD): "))
             quantity=int(input("And it's updated quantity: "))
-            new_product=Product(id,name,price,quantity)   
+            new_product=Product(id,name,price,quantity) 
+            print("="*80)  
             self.update_item(new_product)
             print("Item Updated successfully!")
-            print("==================================================\n\n")
+            print("="*80+"\n\n")
         else:
             print("Product with given id does not exists")
             add_inventory=input("Add new product? (y/n): ")         
@@ -153,63 +157,77 @@ class Inventory:
     def prompt_to_delete_item(self):
         id=input("Enter id of the product to be deleted: ")
         
+        print("="*80)
         if(self.product_exists(id)):
             self.delete_item(id)
-            print("Item Deleted successfully!\n\n")
+            print("Item Deleted successfully!")
         else:
-            print("Product with given id does not exists\n\n")
+            print("Product with given id does not exists")
+        print("="*80+"\n\n")
     
     
     # Operation #4: Print all Items
-    def print_product_list(self,ids=None):
-        # If no ids are passed print entire array
-        print("==================================================")
-        if ids==None:
-            for item in self.items:
-                print(self.items[item]) 
-        else:
-            for id in ids:
-                print(self.items[id]) 
-        print("==================================================\n\n")
+    def print_product_list(self):
+        print("="*80)
+        for item in self.items.values():
+            print(item) 
+        print("="*80+"\n\n")
 
     # Operation #5: Print tabular report
     def generate_report(self):
         total_inventory_value=0
-        print("===============================================================================")
+        print("="*80)
         print("{: <10} {: <30} {: <10} {: <10} {: <10}".format("Id","Name","Quantity","Price","Alert Status"))
         for id,item in self.items.items():
             print("{: <10} {: <30} {: <10} {: <10} {: <10}".format(item.id,item.name,item.quantity,item.price,"Low 🛑" if item.quantity<=self.low_alert_threshold else "Ok ✅")) 
             total_inventory_value+=item.price*item.quantity
         
-        print("===============================================================================")
-        print("Total inventory value: ${0}\n\n".format(total_inventory_value))
+        print("="*80)
+        print("Total inventory value: ${0}".format(total_inventory_value))
+        print("="*80+"\n\n")
 
     # Operation #6: Search by ID
     def prompt_to_view_item(self):
         id=input("Enter id of the product to be view: ")
         
+        print("="*80)
         if(self.product_exists(id)):
-            self.print_product_list([id])
+            print(self.items[id])
         else:
-            print("Product with given id does not exists!\n\n")
+            print("Product with given id does not exists!")
+        print("="*80+"\n\n")
     
     # Operation #7: Search everywhere by keyword
-    def prompt_to_search_everywhere(self):
-        keyword=input("Enter keyword to search: ")
+    def search_everywhere_by_keyboard(self,keyword:str):
         matches=[]
-        for id,item in self.items.items():
-            if keyword in str(item.id) or keyword in str(item.name) or keyword in str(item.quantity) or keyword in str(item.price):
-                matches.append(item.id)
-        print("Search results:")
-        self.print_product_list(matches)
+        keyword=keyword.lower() #To make the search case-insensitive
+        for product_id,item in self.items.items():
+            if keyword in str(item.id).lower() or keyword in str(item.name).lower() or keyword in str(item.quantity).lower() or keyword in str(item.price).lower():
+                matches.append(item)   
+        return matches
+
+    def prompt_to_search_by_keyboard(self):
+        keyword=input("Enter keyword to search: ")
+        matches=self.search_everywhere_by_keyboard(keyword)
+        print("="*80)
+        if matches:
+            for product in matches:
+                print(product)
+        else:
+            print("No products found matching the keyword.")
+        print("="*80+"\n\n")
 
     # Operation #8: List low stock items
     def prompt_to_list_low_stock(self):
-        matches=[]
-        for id,item in self.items.items():
+        print("="*80)
+        low_stock_found=False
+        for item in self.items.values():
             if item.quantity<=self.low_alert_threshold:
-                matches.append(item.id)
-        self.print_product_list(matches)
+                low_stock_found=True
+                print(item)
+        if(not low_stock_found):
+            print("No product with low stock🥳")
+        print("="*80+"\n\n")
 
         
 
@@ -245,7 +263,7 @@ def operation_selector():
         elif choice=="6":
             mobile_inventory.prompt_to_view_item()
         elif choice=="7":
-            mobile_inventory.prompt_to_search_everywhere()
+            mobile_inventory.prompt_to_search_by_keyboard()
         elif choice=="8":
             mobile_inventory.prompt_to_list_low_stock()
         elif choice=="9":

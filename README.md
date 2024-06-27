@@ -58,7 +58,7 @@ Saves data in JSON in the given format:
 Time Complexity:
 - For all operations including search, add, update, delete: O(n)
 
-Since to perform any operation you have to iterate the list atleast once
+Since to perform any operation, you have to iterate the list atleast once
 
 
 ### 2. Search optimized version
@@ -84,7 +84,7 @@ Time Complexity:
 - For search, add, update, delete: O(1)
 - For search everywhere, generate reports etc.: O(n)
 
-Since product id is the key for map search by id can be done in O(1)
+Since product id is the key for map, search by id can be done in O(1)
 ## Assumptions
 - No upper limit to inventory values
 - Product Id is unique and non nullable and can be alphanumeric

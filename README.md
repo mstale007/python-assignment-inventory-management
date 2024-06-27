@@ -37,7 +37,7 @@ Contains attributes
 - Filepath to save data
 
 I have also maintained 2 version for the application as mentioned below:
-### 1. Default version (inventory_management.py)
+### 1. Default version 
 This version prioritizes better readability and organization. Here,  data is stored in JSON in the given format:
 ```json
 [
@@ -61,8 +61,7 @@ Time Complexity:
 
 Since to perform any operation, you have to iterate the list atleast once
 
-
-### 2. Search optimized version (inventory_management_search_optimized.py)
+### 2. Search optimized version 
 This version focuses more on optimization and user experience. Here, data is stored in JSON in given format:
 ```json
 {

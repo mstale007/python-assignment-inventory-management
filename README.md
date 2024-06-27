@@ -1,4 +1,4 @@
-# Inventory Management System (Python🐍)
+# Inventory Management System (Python)
 
 Features of the Inventory management system:
 - 📦 Manage products (Add, Update, Delete and Search) 

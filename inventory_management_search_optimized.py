@@ -87,6 +87,28 @@ class Inventory:
         with open(self.__data_filepath, "w") as file:
             json.dump(self.items,file,default=lambda a: a.__dict__)
             print("Data Saved!")
+    
+    # Function to get valid price
+    def prompt_to_get_price(self):
+        while(1):
+            price=input("Enter it's price (in USD): ")
+            try:
+                price=float(price)
+                if price<0: raise ValueError()
+                return price
+            except:
+                print("Price must be a positive integer/decimal")
+
+    # Function to get valid quantity
+    def prompt_to_get_quantity(self):
+        while(1):
+            quantity=input("Enter it's quantity: ")
+            try:
+                quantity=int(quantity)
+                if quantity<0: raise ValueError()
+                return quantity
+            except:
+                print("Quantity must be a positive integer")
 
     # Check if product exists return boolean value
     def product_exists(self, product_id):
@@ -104,8 +126,8 @@ class Inventory:
 
         if(not self.product_exists(id)): # Check if product already exists in inventory
             name=input("Enter its name: ")
-            while (price:=float(input("It's price (in USD): ")))<0: print("Price cannot be negative")
-            while (quantity:=int(input("And it's quantity:  ")))<0: print("Quantity cannot be negative")
+            price=self.prompt_to_get_price()
+            quantity=self.prompt_to_get_quantity()
             new_product=Product(id,name,price,quantity)
             print("="*80)
             self.add_item(new_product)
@@ -136,8 +158,8 @@ class Inventory:
         
         if(self.product_exists(id)): # Check if product already exists in inventory
             name=input("Enter its new name: ")
-            while (price:=float(input("It's new price (in USD): ")))<0: print("Price cannot be negative")
-            while (quantity:=int(input("And it's updated quantity: ")))<0: print("Quantity cannot be negative")
+            price=self.prompt_to_get_price()
+            quantity=self.prompt_to_get_quantity()
             new_product=Product(id,name,price,quantity) 
             print("="*80)  
             self.update_item(new_product)

@@ -86,8 +86,7 @@ Time Complexity:
 
 Since product id is the key for map, search by id can be done in O(1)
 ## Assumptions
-- Product Id is unique and non nullable and can be alphanumeric
+- Product Id is unique and non nullable, can be alphanumeric  and is case-sensitive
 - Attributes of a product are fixed to id, name, price, quantity (no new attributes can be added)
 - No upper limit to inventory values
-- If an invalid value is entered (such as a negative number or non-numeric input for price/quantity), the program will terminate. (Handling such cases is straightforward but has been omitted here to maintain code simplicity and readability.)
 - Quantity is int and Price is float

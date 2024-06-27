@@ -84,6 +84,28 @@ class Inventory:
         with open(self.__data_filepath, "w") as file:
             json.dump([product.__dict__ for product in self.items], file)
             print("Data Saved!")
+
+    # Function to get valid price
+    def prompt_to_get_price(self):
+        while(1):
+            price=input("Enter it's price (in USD): ")
+            try:
+                price=float(price)
+                if price<0: raise ValueError()
+                return price
+            except:
+                print("Price must be a positive integer/decimal")
+
+    # Function to get valid quantity
+    def prompt_to_get_quantity(self):
+        while(1):
+            quantity=input("Enter it's quantity: ")
+            try:
+                quantity=int(quantity)
+                if quantity<0: raise ValueError()
+                return quantity
+            except:
+                print("Quantity must be a positive integer")
     
     # Searches inventory for product by product id, if product does not exists returns -1 
     def get_product_by_id(self, product_id):
@@ -103,8 +125,8 @@ class Inventory:
 
         if(not self.get_product_by_id(id)): # Check if product already exists in inventory
             name=input("Enter its name: ")
-            price=float(input("It's price (in USD): "))
-            quantity=int(input("And it's quantity: "))
+            price=self.prompt_to_get_price()
+            quantity=self.prompt_to_get_quantity()
             new_product=Product(id,name,price,quantity)
             print("="*80)
             self.add_item(new_product)
@@ -128,8 +150,8 @@ class Inventory:
         
         if(self.get_product_by_id(id)):
             name=input("Enter its new name: ")
-            price=float(input("It's new price (in USD): "))
-            quantity=int(input("And it's updated quantity: "))
+            price=self.prompt_to_get_price()
+            quantity=self.prompt_to_get_quantity()
             new_product=Product(id,name,price,quantity)
             print("="*80)
             self.update_item(new_product)

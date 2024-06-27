@@ -36,7 +36,8 @@ Contains attributes
 - Low Stock alert threshold
 - Filepath to save data
 
-### 1. Default version
+I have also maintained 2 version for the application as mentioned below:
+### 1. Default version (inventory_management.py)
 This version prioritizes better readability and organization. Here,  data is stored in JSON in the given format:
 ```json
 [
@@ -61,8 +62,8 @@ Time Complexity:
 Since to perform any operation, you have to iterate the list atleast once
 
 
-### 2. Search optimized version
-This version focuses more on optimization and experience. Here, data is stored in JSON in given format:
+### 2. Search optimized version (inventory_management_search_optimized.py)
+This version focuses more on optimization and user experience. Here, data is stored in JSON in given format:
 ```json
 {
     "A1": {
@@ -89,5 +90,5 @@ Since product id is the key for map, search by id can be done in O(1)
 - Product Id is unique and non nullable and can be alphanumeric
 - Attributes of a product are fixed to id, name, price, quantity (no new attributes can be added)
 - No upper limit to inventory values
-- If an invalid value is entered (such as a negative number or non-numeric input for price/quantity), the program will terminate. Handling such cases is straightforward but has been omitted here to maintain code simplicity and readability.
+- If an invalid value is entered (such as a negative number or non-numeric input for price/quantity), the program will terminate. (Handling such cases is straightforward but has been omitted here to maintain code simplicity and readability.)
 - Quantity is int and Price is float

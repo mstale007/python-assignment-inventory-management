@@ -11,8 +11,6 @@ class Product:
     def __str__(self) -> str:
         return '{0.name} (Id: {0.id}, Quantity: {0.quantity}, Price: {0.price})'.format(self)
     
-    def __repr__(self) -> str:
-        return 'Product({0.id!r},{0.name!r},{0.price!r},{0.quantity!r})'.format(self)
     
     #Getters
     @property

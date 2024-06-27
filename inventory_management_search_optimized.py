@@ -112,7 +112,7 @@ class Inventory:
     def product_exists(self, product_id):
         return product_id in self.items
     
-    # Operation #1: Add new item
+    # Funtions to perform Operation #1: Add new item
     def add_item(self,new_product:Product):
         self.items[new_product.id]=new_product
         if(new_product.quantity<=2):
@@ -139,7 +139,7 @@ class Inventory:
                 self.prompt_to_update_item(id)  
 
 
-    # Operation #2: Update existing item
+    # Funtions to perform Operation #2: Update existing item
     def update_item(self,new_product:Product):
         if(new_product.id in self.items):
             self.items[new_product.id].name=new_product.name
@@ -170,7 +170,7 @@ class Inventory:
             if(add_inventory=="y"):
                 self.prompt_to_add_item(id)
 
-    # Operation #3: Delete existing Item
+    # Funtions to perform Operation #3: Delete existing Item
     def delete_item(self,product_id:int):
         del self.items[product_id]
 
@@ -186,14 +186,14 @@ class Inventory:
         print("="*80+"\n\n")
     
     
-    # Operation #4: Print all Items
+    # Funtions to perform Operation #4: Print all Items
     def print_product_list(self):
         print("="*80)
         for item in self.items.values():
             print(item) 
         print("="*80+"\n\n")
 
-    # Operation #5: Print tabular report
+    # Funtions to perform Operation #5: Print tabular report
     def generate_report(self):
         total_inventory_value=0
         print("="*80)
@@ -206,7 +206,7 @@ class Inventory:
         print("Total inventory value: ${0}".format(total_inventory_value))
         print("="*80+"\n\n")
 
-    # Operation #6: Search by ID
+    # Funtions to perform Operation #6: Search by ID
     def prompt_to_view_item(self):
         id=input("Enter id of the product to be view: ")
         
@@ -217,7 +217,7 @@ class Inventory:
             print("Product with given id does not exists!")
         print("="*80+"\n\n")
     
-    # Operation #7: Search everywhere by keyword
+    # Funtions to perform Operation #7: Search everywhere by keyword
     def search_everywhere_by_keyboard(self,keyword:str):
         matches=[]
         keyword=keyword.lower() #To make the search case-insensitive
@@ -237,7 +237,7 @@ class Inventory:
             print("No products found matching the keyword.")
         print("="*80+"\n\n")
 
-    # Operation #8: List low stock items
+    # Funtions to perform Operation #8: List low stock items
     def prompt_to_list_low_stock(self):
         print("="*80)
         low_stock_found=False

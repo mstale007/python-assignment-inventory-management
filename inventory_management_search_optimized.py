@@ -104,8 +104,8 @@ class Inventory:
 
         if(not self.product_exists(id)): # Check if product already exists in inventory
             name=input("Enter its name: ")
-            price=float(input("It's price (in USD): "))
-            quantity=int(input("And it's quantity: "))
+            while (price:=float(input("It's price (in USD): ")))<0: print("Price cannot be negative")
+            while (quantity:=int(input("And it's quantity:  ")))<0: print("Quantity cannot be negative")
             new_product=Product(id,name,price,quantity)
             print("="*80)
             self.add_item(new_product)
@@ -136,8 +136,8 @@ class Inventory:
         
         if(self.product_exists(id)): # Check if product already exists in inventory
             name=input("Enter its new name: ")
-            price=float(input("It's new price (in USD): "))
-            quantity=int(input("And it's updated quantity: "))
+            while (price:=float(input("It's new price (in USD): ")))<0: print("Price cannot be negative")
+            while (quantity:=int(input("And it's updated quantity: ")))<0: print("Quantity cannot be negative")
             new_product=Product(id,name,price,quantity) 
             print("="*80)  
             self.update_item(new_product)

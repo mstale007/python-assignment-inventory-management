@@ -37,7 +37,7 @@ Contains attributes
 - Filepath to save data
 
 ### 1. Default version
-Saves data in JSON in the given format:
+This version prioritizes better readability and organization. Here,  data is stored in JSON in the given format:
 ```json
 [
     {
@@ -62,7 +62,7 @@ Since to perform any operation, you have to iterate the list atleast once
 
 
 ### 2. Search optimized version
-Saves data in JSON in given format:
+This version focuses more on optimization and experience. Here, data is stored in JSON in given format:
 ```json
 {
     "A1": {
@@ -86,6 +86,8 @@ Time Complexity:
 
 Since product id is the key for map, search by id can be done in O(1)
 ## Assumptions
-- No upper limit to inventory values
 - Product Id is unique and non nullable and can be alphanumeric
 - Attributes of a product are fixed to id, name, price, quantity (no new attributes can be added)
+- No upper limit to inventory values
+- If invalid value is entered program should halt (Negative price or quanity)
+- Quantity is int and Price is float

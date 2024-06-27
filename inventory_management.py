@@ -136,8 +136,7 @@ class Inventory:
             print("Item Updated successfully!")
         else:
             print("Product with given id does not exists")
-        print("="*80)
-        print("\n\n")
+        print("="*80+"\n\n")
 
     # Operation #3: Delete existing Item
     def delete_item(self,product_id:Product):
@@ -153,8 +152,7 @@ class Inventory:
             print("Item Deleted successfully!")
         else:
             print("Product with given id does not exists")
-        print("="*80)
-        print("\n\n")
+        print("="*80+"\n\n")
     
     
     # Operation #4: Print all Items
@@ -162,8 +160,7 @@ class Inventory:
         print("="*80)
         for item in self.items:
             print(item) 
-        print("="*80)
-        print("\n\n")
+        print("="*80+"\n\n")
 
     # Operation #5: Print tabular report
     def generate_report(self):
@@ -176,8 +173,7 @@ class Inventory:
         
         print("="*80)
         print("Total inventory value: ${0}".format(total_inventory_value))
-        print("="*80)
-        print("\n\n")
+        print("="*80+"\n\n")
 
     # Operation #6: Search by ID
     def prompt_to_view_item(self):
@@ -188,8 +184,7 @@ class Inventory:
             print(results)
         else:
             print("Product with given id does not exists")
-        print("="*80)
-        print("\n\n")
+        print("="*80+"\n\n")
     
     # Operation #7: Search everywhere by keyword
     def search_everywhere_by_keyboard(self,keyword:str):
@@ -209,8 +204,7 @@ class Inventory:
                 print(product)
         else:
             print("No products found matching the keyword.")
-        print("="*80)
-        print("\n\n")
+        print("="*80+"\n\n")
 
 
     # Operation #8: List low stock items
@@ -223,8 +217,7 @@ class Inventory:
                 print(item)
         if(not low_stock_found):
             print("No product with low stock🥳")
-        print("="*80)
-        print("\n\n")
+        print("="*80+"\n\n")
 
         
 

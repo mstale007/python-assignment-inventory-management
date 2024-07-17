@@ -29,7 +29,7 @@ class Product:
     #Setters with validations
     @id.setter
     def id(self,value):
-        if (value == None or " " in value):
+        if (value == None or " " in value or value==""):
             raise ValueError("id cannot be None and cannot contain any spaces")
         self._id=value
     @name.setter
@@ -39,7 +39,7 @@ class Product:
         self._name=value
     @price.setter
     def price(self,value):
-        if not isinstance(value,float):
+        if not (isinstance(value,float) or isinstance(value,int)):
             raise TypeError("Price must be a number")
         elif value<0:
             raise ValueError("Price cannot be negative")
@@ -76,8 +76,6 @@ class Inventory:
                 data=json.load(file)
                 for product_id, product in data.items():
                     product_obj=Product(**product)
-                    # for key, value in product.items():
-                    #     setattr(product_obj, key, value)
                     self.items[product_id]=product_obj
     
     # Save Data to JSON
@@ -132,7 +130,7 @@ class Inventory:
         if id==None: 
             id=self.prompt_to_get_id()
 
-        if(not self.product_exists(id)): # Check if product already exists in inventory
+        if(not self.search_by_id(id)): # Check if product already exists in inventory
             name=input("Enter its name: ")
             price=self.prompt_to_get_price()
             quantity=self.prompt_to_get_quantity()
@@ -164,7 +162,7 @@ class Inventory:
         if id==None:
             id=self.prompt_to_get_id()
         
-        if(self.product_exists(id)): # Check if product already exists in inventory
+        if(self.search_by_id(id)): # Check if product already exists in inventory
             name=input("Enter its new name: ")
             price=self.prompt_to_get_price()
             quantity=self.prompt_to_get_quantity()
@@ -181,14 +179,17 @@ class Inventory:
                 self.prompt_to_add_item(id)
 
     # Funtions to perform Operation #3: Delete existing Item
-    def delete_item(self,product_id:int):
-        del self.items[product_id]
+    def delete_item(self,product_id):
+        if product_id in self.items:
+            del self.items[product_id]
+            return True
+        return False
 
     def prompt_to_delete_item(self):
         id=self.prompt_to_get_id()
         
         print("="*80)
-        if(self.product_exists(id)):
+        if(self.search_by_id(id)):
             self.delete_item(id)
             print("Item Deleted successfully!")
         else:
@@ -217,12 +218,18 @@ class Inventory:
         print("="*80+"\n\n")
 
     # Funtions to perform Operation #6: Search by ID
+    def search_by_id(self,id):
+        if(id in self.items):
+            return self.items[id]
+        return False
+
     def prompt_to_view_item(self):
         id=self.prompt_to_get_id()
         
         print("="*80)
-        if(self.product_exists(id)):
-            print(self.items[id])
+        result=self.search_by_id(id)
+        if(result):
+            print(result)
         else:
             print("Product with given id does not exists!")
         print("="*80+"\n\n")

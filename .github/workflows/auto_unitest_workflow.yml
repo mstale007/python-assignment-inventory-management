@@ -11,4 +11,4 @@ jobs:
       uses : actions/checkout@v2
       
     - name : Run tests 
-      run : python testInventory.py
+      run : python testInventoryManagement.py

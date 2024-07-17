@@ -1,9 +1,11 @@
 import os
 import json
+import re
+
+ALPHANUMERIC_REGEX = "^[a-zA-Z0-9_]*$"
 
 
 class Product:
-
     def __init__(self, id, name, price, quantity) -> None:
         self.id = id
         self.name = name
@@ -16,7 +18,6 @@ class Product:
             self)
 
     # Getters
-
     @property
     def id(self):
         return self._id
@@ -36,8 +37,8 @@ class Product:
     # Setters with validations
     @id.setter
     def id(self, value):
-        if (value == None or " " in value or value == ""):
-            raise ValueError("id cannot be None and cannot contain any spaces")
+        if (value == None or value == "" or re.search(ALPHANUMERIC_REGEX,value)==None):
+            raise ValueError("id can only be alphanumeric")
         self._id = value
 
     @name.setter
@@ -64,7 +65,6 @@ class Product:
 
 
 class Inventory:
-
     def __init__(self, load_from_backup=True, low_alert_threshold=2) -> None:
         self.items = {}
         self.low_alert_threshold = low_alert_threshold
@@ -78,7 +78,7 @@ class Inventory:
 
     def __str__(self) -> str:
         return 'Inventory (Ids: {0}, Length: {1})'.format(
-            self.items.keys(), len(self.items))
+            list(self.items.keys()), len(self.items))
 
     # Load Data from JSON and create List of Products
     def load_data(self):
@@ -107,11 +107,11 @@ class Inventory:
         while (1):
             id = input("Enter id of the product: ")
             try:
-                if id == None or " " in id or id == "":
+                if id == None or id == "" or re.search(ALPHANUMERIC_REGEX,id)==None:
                     raise ValueError()
                 return id
             except:
-                print("id cannot be None and cannot contain any spaces")
+                print("id can only be alphanumeric")
 
     # Function to get valid price
     def prompt_to_get_price(self):
@@ -221,6 +221,8 @@ class Inventory:
     # Funtions to perform Operation #4: Print all Items
     def print_product_list(self):
         print("=" * 80)
+        print(self)
+        print("=" * 80)
         for item in self.items.values():
             print(item)
         print("=" * 80 + "\n\n")
@@ -228,6 +230,8 @@ class Inventory:
     # Funtions to perform Operation #5: Print tabular report
     def generate_report(self):
         total_inventory_value = 0
+        print("=" * 80)
+        print(self)
         print("=" * 80)
         print("{: <10} {: <30} {: <10} {: <10} {: <10}".format("Id", "Name", "Quantity", "Price", "Alert Status"))
         for id, item in self.items.items():

@@ -1,5 +1,6 @@
 import unittest
 import json
+import pandas as pd
 from inventory_management_search_optimized import Inventory, Product
 
 
@@ -83,6 +84,12 @@ class TestInventory(unittest.TestCase):
         """Test for Inventory search globally by keyword"""
         result=self.test_inventory.search_everywhere_by_keyboard("iPhone")
         self.assertEqual(len(result),1)
+    
+    def test_export_to_excel(self):
+        """Test for Inventory export to excel"""
+        self.test_inventory.export_to_excel()
+        excel_data=pd.read_csv("exported_output.csv")
+        self.assertEqual(len(self.test_inventory.items),len(excel_data))
 
 # Test product class
 suite = unittest.TestLoader().loadTestsFromTestCase(TestProduct)

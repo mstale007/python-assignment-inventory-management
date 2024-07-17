@@ -8,11 +8,10 @@ Features of the Inventory management system:
 - 💾 Persists data in JSON format
 
 ## Usage
-- Default version (Prioritizes code readability)
+- Install dependencies
 ```shell
-python inventory_management.py
+pip install -r requirements.txt
 ```
-
 - Search optimized version (Optimized for speed)
 ```shell
 python inventory_management_search_optimized.py

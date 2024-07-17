@@ -29,8 +29,8 @@ class Product:
     #Setters with validations
     @id.setter
     def id(self,value):
-        if (value == None):
-            raise ValueError("id cannot be None")
+        if (value == None or " " in value):
+            raise ValueError("id cannot be None and cannot contain any spaces")
         self._id=value
     @name.setter
     def name(self,value):
@@ -58,7 +58,7 @@ class Inventory:
     def __init__(self,load_from_backup=True,low_alert_threshold=2) -> None:
         self.items={}
         self.low_alert_threshold=low_alert_threshold
-        self.__data_filepath="data/backup_optimized.json"
+        self.__data_filepath="data/backup_test.json" # Private variable
         if(load_from_backup):
             try:
                 self.load_data()
@@ -67,7 +67,7 @@ class Inventory:
                 print("Error while loading data")
             
     def __str__(self) -> str:
-        return 'Inventory with {0} items'.format(len(self.items))
+        return 'Inventory (Ids: {0}, Length: {1})'.format(self.items.keys(),len(self.items))
 
     # Load Data from JSON and create List of Products
     def load_data(self):
@@ -75,17 +75,27 @@ class Inventory:
             with open(self.__data_filepath, "r") as file:
                 data=json.load(file)
                 for product_id, product in data.items():
-                    product_obj=Product.__new__(Product)
-                    for key, value in product.items():
-                        setattr(product_obj, key, value)
+                    product_obj=Product(**product)
+                    # for key, value in product.items():
+                    #     setattr(product_obj, key, value)
                     self.items[product_id]=product_obj
     
     # Save Data to JSON
     def save_data(self):
         with open(self.__data_filepath, "w") as file:
-            json.dump(self.items,file,default=lambda a: a.__dict__)
+            json.dump(self.items,file,default=lambda a: {"id":a.id,"name":a.name,"price":a.price,"quantity":a.quantity})
             print("Data Saved!")
     
+    # Function to get valid ID
+    def prompt_to_get_id(self):
+        while(1):
+            id=input("Enter id of the product: ")
+            try:
+                if id == None or " " in id or id == "": raise ValueError()
+                return id
+            except:
+                print("id cannot be None and cannot contain any spaces")
+
     # Function to get valid price
     def prompt_to_get_price(self):
         while(1):
@@ -120,7 +130,7 @@ class Inventory:
     
     def prompt_to_add_item(self,id=None):
         if id==None: 
-            id=input("Enter id of the product: ")
+            id=self.prompt_to_get_id()
 
         if(not self.product_exists(id)): # Check if product already exists in inventory
             name=input("Enter its name: ")
@@ -152,7 +162,7 @@ class Inventory:
 
     def prompt_to_update_item(self,id=None):
         if id==None:
-            id=input("Enter id of the product: ")
+            id=self.prompt_to_get_id()
         
         if(self.product_exists(id)): # Check if product already exists in inventory
             name=input("Enter its new name: ")
@@ -175,7 +185,7 @@ class Inventory:
         del self.items[product_id]
 
     def prompt_to_delete_item(self):
-        id=input("Enter id of the product to be deleted: ")
+        id=self.prompt_to_get_id()
         
         print("="*80)
         if(self.product_exists(id)):
@@ -208,7 +218,7 @@ class Inventory:
 
     # Funtions to perform Operation #6: Search by ID
     def prompt_to_view_item(self):
-        id=input("Enter id of the product to be view: ")
+        id=self.prompt_to_get_id()
         
         print("="*80)
         if(self.product_exists(id)):

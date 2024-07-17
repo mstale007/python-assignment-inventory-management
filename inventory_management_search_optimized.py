@@ -1,6 +1,7 @@
 import os
 import json
 import re
+import pandas as pd
 
 ALPHANUMERIC_REGEX = "^[a-zA-Z0-9_]*$"
 
@@ -63,6 +64,14 @@ class Product:
             raise ValueError("Quantity cannot be negative")
         self._quantity = value
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'price':self.price,
+            'quantity':self.quantity
+        }
+
 
 class Inventory:
     def __init__(self, load_from_backup=True, low_alert_threshold=2) -> None:
@@ -94,12 +103,7 @@ class Inventory:
         with open(self.__data_filepath, "w") as file:
             json.dump(self.items,
                       file,
-                      default=lambda a: {
-                          "id": a.id,
-                          "name": a.name,
-                          "price": a.price,
-                          "quantity": a.quantity
-                      })
+                      default=lambda a: a.to_dict())
             print("Data Saved!")
 
     # Function to get valid ID
@@ -294,6 +298,14 @@ class Inventory:
             print("No product with low stock🥳")
         print("=" * 80 + "\n\n")
 
+    # Funtions to perform Operation #9: Export to excel
+    def export_to_excel(self):
+        excel_data=pd.DataFrame.from_records([product.to_dict() for product in self.items.values()])
+        excel_data.to_csv("exported_output.csv",index=False,header=["ID","Name","Price","Quantity"])
+        print("=" * 80)
+        print("Export data to exported_output.csv succesfully!")
+        print("=" * 80 + "\n\n")
+
 
 def operation_selector():
     print("Welcome to Inventory Managment System!👋🏻")
@@ -312,7 +324,8 @@ def operation_selector():
         print("6. Search product by ID")
         print("7. Search Everywhere by keyword")
         print("8. List low stock items")
-        print("9. Exit application")
+        print("9. Export data to excel")
+        print("0. Exit application")
 
         choice = input("Operation number: ")
         if choice == "1":
@@ -333,6 +346,8 @@ def operation_selector():
         elif choice == "8":
             mobile_inventory.prompt_to_list_low_stock()
         elif choice == "9":
+            mobile_inventory.export_to_excel()
+        elif choice == "0":
             mobile_inventory.save_data()
             break
         else:

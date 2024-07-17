@@ -219,7 +219,6 @@ class Inventory:
         print("=" * 80 + "\n\n")
 
     # Funtions to perform Operation #4: Print all Items
-
     def print_product_list(self):
         print("=" * 80)
         for item in self.items.values():

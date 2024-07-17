@@ -84,5 +84,10 @@ class TestInventory(unittest.TestCase):
         result=self.testInventory.search_everywhere_by_keyboard("iPhone")
         self.assertEqual(len(result),1)
 
-if __name__ == '__main__':
-    unittest.main()
+# Test product class
+suite = unittest.TestLoader().loadTestsFromTestCase(TestProduct)
+unittest.TextTestRunner(verbosity=2,buffer=True).run(suite)
+
+# Test Inventory class
+suite = unittest.TestLoader().loadTestsFromTestCase(TestInventory)
+unittest.TextTestRunner(verbosity=2,buffer=True).run(suite)

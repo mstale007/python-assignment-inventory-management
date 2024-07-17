@@ -11,4 +11,6 @@ jobs:
       uses : actions/checkout@v2
       
     - name : Run tests 
-      run : python test_inventory_managment.py
+      run : | 
+        pip install pandas
+        python test_inventory_managment.py
